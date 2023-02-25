@@ -1,0 +1,7 @@
+:root {
+  --primary-color: #ff9854; /* css定义变量 */
+}
+
+body {
+  font-size: 14px;
+}
