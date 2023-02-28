@@ -1,7 +1,18 @@
 :root {
   --primary-color: #ff9854; /* css定义变量 */
+
+  /* 修改seatch样式 */
+  --van-search-left-icon-color: var(--primary-color) !important;
 }
 
 body {
   font-size: 14px;
+}
+
+.top-page {
+  position: relative;
+  height: 100vh;
+  z-index: 9;
+  overflow-y: auto;
+  background-color: #fff;
 }
