@@ -4,6 +4,7 @@
   --theme-linear-gradient: linear-gradient(90deg, #fa8c1d, #fcaf3f);
   /* 修改seatch样式 */
   --van-search-left-icon-color: var(--primary-color) !important;
+  --van-primary-color: var(--primary-color);
 }
 
 body {
