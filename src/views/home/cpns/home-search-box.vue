@@ -1,7 +1,7 @@
 <template>
   <div class="search-box">
     <!-- 位置信息 -->
-    <div class="home-search-box">
+    <div class="home-search-box bottom-gray-line">
       <div class="location">
         <div class="city" @click="cityClick">{{ currentCity.cityName }}</div>
         <div class="position" @click="positionClick">
@@ -33,12 +33,36 @@
       type="range"
       color="#ff9854"
       @confirm="onConfirm" />
+
+    <!-- 价格/人数选择 -->
+    <div class="section price-counter bottom-gray-line">
+      <div class="start">价格不限</div>
+      <div class="end">人数不限</div>
+    </div>
+    <!-- 关键字 -->
+    <div class="section keyword bottom-gray-line">关键字/位置/民宿名</div>
+
+    <!-- 热门建议 -->
+    <div class="section hot-suggests">
+      <template v-for="(item, index) in hotSuggests" :key="index">
+        <div
+          class="item"
+          :style="{ color: item.tagText.color, background: item.tagText.background.color }">
+          {{ item.tagText.text }}
+        </div>
+      </template>
+    </div>
+    <!-- 搜索按钮 -->
+    <div class="section search-btn">
+      <div class="btn" @click="searchBtnClick">开始搜索</div>
+    </div>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
   import useCityStore from '@/stores/modules/city';
+  import useHomeStore from '@/stores/modules/home';
   import { storeToRefs } from 'pinia';
   import { useRouter } from 'vue-router';
   import { formatMonthDay, getDiffDats } from '@/utils/format_date';
@@ -82,6 +106,21 @@
     endDate.value = formatMonthDay(value[1]);
     stayCount.value = getDiffDats(value[1], value[0]);
     showCalendar.value = false;
+  };
+
+  // 热门建议
+  const homeStore = useHomeStore();
+  const { hotSuggests } = storeToRefs(homeStore);
+
+  // 开始搜索
+  const searchBtnClick = () => {
+    router.push({
+      path: '/search',
+      query: {
+        startDate: startDate.value,
+        endDate: endDate.value,
+      },
+    });
   };
 </script>
 
@@ -158,6 +197,36 @@
       text-align: center;
       font-size: 12px;
       color: #666;
+    }
+  }
+  .price-counter {
+    .start {
+      border-right: 1px solid var(--line-color);
+    }
+  }
+  .hot-suggests {
+    margin: 10px 0;
+    height: auto;
+    .item {
+      padding: 4px 8px;
+      margin: 4px;
+      border-radius: 14px;
+      font-size: 12px;
+      line-height: 1;
+    }
+  }
+  .search-btn {
+    .btn {
+      width: 342px;
+      height: 38px;
+      max-height: 50px;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 38px;
+      text-align: center;
+      border-radius: 20px;
+      color: #fff;
+      background-image: var(--theme-linear-gradient);
     }
   }
 </style>

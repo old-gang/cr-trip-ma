@@ -1,6 +1,7 @@
 :root {
   --primary-color: #ff9854; /* css定义变量 */
-
+  --line-color: #faf8f9;
+  --theme-linear-gradient: linear-gradient(90deg, #fa8c1d, #fcaf3f);
   /* 修改seatch样式 */
   --van-search-left-icon-color: var(--primary-color) !important;
 }
@@ -15,4 +16,8 @@ body {
   z-index: 9;
   overflow-y: auto;
   background-color: #fff;
+}
+
+.bottom-gray-line {
+  border-bottom: 1px solid var(--line-color);
 }
