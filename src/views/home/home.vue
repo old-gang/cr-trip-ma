@@ -9,16 +9,20 @@
     <homeCategories />
     <!-- 房屋列表 -->
     <homeContent />
+    <div class="search-bar" v-if="isShowSearchBar">
+      <searchBar />
+    </div>
   </div>
 </template>
 
 <script setup>
-  import { watch } from 'vue';
+  import { watch, computed } from 'vue';
   import useHomeStore from '@/stores/modules/home';
   import homeNavBar from './cpns/home-nav-bar.vue';
   import homeSearchBox from './cpns/home-search-box.vue';
   import homeCategories from './cpns/home-categories.vue';
   import homeContent from './cpns/home-content.vue';
+  import searchBar from '@/components/search-bar/search-bar.vue';
   import useScroll from '@/hooks/useScroll';
 
   // 发送网络请求
@@ -36,7 +40,7 @@
   //     homeStore.fetchHouseList();
   //   }
   // });
-  const { isReachBottom } = useScroll();
+  const { isReachBottom, scrollTop } = useScroll();
   watch(isReachBottom, (newVal) => {
     if (newVal) {
       // 获取房屋列表
@@ -45,6 +49,11 @@
       });
     }
   });
+
+  // 定义的可响应式数据, 依赖另外一个可响应式的数据, 那么可以使用计算函数(computed)
+  const isShowSearchBar = computed(() => {
+    return scrollTop.value >= 360;
+  });
 </script>
 
 <style lang="less" scoped>
@@ -52,5 +61,15 @@
     img {
       width: 100%;
     }
+  }
+  .search-bar {
+    position: fixed;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    padding: 16px 16px 10px;
+    background-color: #fff;
   }
 </style>

@@ -16,14 +16,14 @@
       <div class="start">
         <div class="date">
           <span class="tip">入住</span>
-          <span class="time">{{ startDate }}</span>
+          <span class="time">{{ startDateStr }}</span>
         </div>
         <div class="stay">共{{ stayCount }}晚</div>
       </div>
       <div class="end">
         <div class="date">
           <span class="tip">离店</span>
-          <span class="time">{{ endDate }}</span>
+          <span class="time">{{ endDateStr }}</span>
         </div>
       </div>
     </div>
@@ -60,12 +60,13 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import useCityStore from '@/stores/modules/city';
   import useHomeStore from '@/stores/modules/home';
   import { storeToRefs } from 'pinia';
   import { useRouter } from 'vue-router';
   import { formatMonthDay, getDiffDats } from '@/utils/format_date';
+  import useMainStore from '@/stores/modules/main';
   const router = useRouter();
   // 城市 / 位置
   const cityClick = () => {
@@ -92,18 +93,18 @@
   const { currentCity } = storeToRefs(cityStore);
 
   // 日期范围
-  const nowDate = new Date();
-  const newDate = new Date();
-  newDate.setDate(nowDate.getDate() + 1);
-  const startDate = ref(formatMonthDay(nowDate));
-  const endDate = ref(formatMonthDay(newDate));
+  const mainStore = useMainStore();
+  const { startDate, endDate } = storeToRefs(mainStore);
   const stayCount = ref(1);
+  const startDateStr = computed(() => formatMonthDay(startDate.value));
+  const endDateStr = computed(() => formatMonthDay(endDate.value));
 
   // 日历
   const showCalendar = ref(false);
   const onConfirm = (value) => {
-    startDate.value = formatMonthDay(value[0]);
-    endDate.value = formatMonthDay(value[1]);
+    // 修改仓库中的时间
+    startDate.value = value[0];
+    endDate.value = value[1];
     stayCount.value = getDiffDats(value[1], value[0]);
     showCalendar.value = false;
   };
@@ -117,8 +118,8 @@
     router.push({
       path: '/search',
       query: {
-        startDate: startDate.value,
-        endDate: endDate.value,
+        startDate: startDateStr.value,
+        endDate: endDateStr.value,
       },
     });
   };
