@@ -8,6 +8,7 @@
     <tabBar v-show="!route.meta.hideTabBar" />
     <!-- <tabBar /> -->
     <loading />
+    <!-- 测试 -->
   </div>
 </template>
 
